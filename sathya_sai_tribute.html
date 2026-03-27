@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sathya Sai Baba — Divine Grace</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8d08a;
+    --gold-dark: #8a6a20;
+    --cream: #fdf8f0;
+    --deep: #1a1208;
+    --warm: #6b4c1e;
+    --text: #3a2a0e;
+    --muted: #8a7150;
+    --felt: #1a4a2e;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.06) 0%, transparent 50%);
+    pointer-events: none; z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 12px;
+    border: 1px solid rgba(201,168,76,0.25);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: relative; z-index: 10;
+    display: flex; justify-content: center;
+    padding: 28px 40px 0;
+  }
+
+  .nav-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); background: none;
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 10px 28px; cursor: pointer; transition: all 0.3s;
+  }
+
+  .nav-btn:first-child { border-right: none; }
+  .nav-btn:hover { color: var(--gold); border-color: rgba(201,168,76,0.5); }
+  .nav-btn.active { color: var(--gold-dark); background: rgba(201,168,76,0.08); border-color: var(--gold); }
+
+  /* PAGES */
+  .page { display: none; position: relative; z-index: 1; }
+  .page.active { display: block; }
+
+  /* ══ TRIBUTE PAGE ══ */
+  .tribute-inner {
+    max-width: 900px; margin: 0 auto;
+    padding: 48px 40px 80px; text-align: center;
+  }
+
+  .top-ornament {
+    font-size: 13px; letter-spacing: 6px;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 16px;
+  }
+
+  .om-symbol {
+    font-size: 52px; color: var(--gold); line-height: 1; margin-bottom: 20px;
+    animation: glowPulse 3s ease infinite;
+    text-shadow: 0 0 30px rgba(201,168,76,0.3);
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(28px, 5vw, 52px); font-weight: 400;
+    letter-spacing: 3px; color: var(--deep); line-height: 1.2; margin-bottom: 6px;
+  }
+
+  h1 span {
+    display: block; font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: clamp(14px, 2vw, 22px); font-weight: 300;
+    letter-spacing: 6px; color: var(--gold); margin-top: 8px;
+  }
+
+  .divider {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; margin: 32px auto;
+  }
+
+  .divider::before, .divider::after {
+    content: ''; flex: 1; max-width: 120px;
+    height: 1px; background: linear-gradient(to right, transparent, var(--gold));
+  }
+
+  .divider::after { background: linear-gradient(to left, transparent, var(--gold)); }
+  .divider-diamond { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
+
+  .smiley-face { width: 120px; height: 120px; margin: 0 auto 40px; display: block; filter: drop-shadow(0 4px 20px rgba(201,168,76,0.25)); }
+
+  .photo-frame { position: relative; display: inline-block; margin: 0 auto 48px; }
+  .frame-outer { border: 2px solid var(--gold); padding: 14px; position: relative; }
+  .frame-outer::before, .frame-outer::after, .frame-inner::before, .frame-inner::after {
+    content: '✦'; position: absolute; color: var(--gold); font-size: 14px; line-height: 1;
+  }
+  .frame-outer::before { top: -8px; left: -8px; }
+  .frame-outer::after { top: -8px; right: -8px; }
+  .frame-inner::before { bottom: -8px; left: -8px; }
+  .frame-inner::after { bottom: -8px; right: -8px; }
+  .frame-inner { border: 1px solid rgba(201,168,76,0.4); padding: 8px; position: relative; }
+  .photo-placeholder {
+    width: 280px; height: 340px;
+    background: linear-gradient(160deg, #f5ead8, #e8d4b0, #d4b87a);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+  }
+  .photo-placeholder .portrait-icon { font-size: 80px; opacity: 0.5; }
+  .photo-placeholder .photo-label { font-style: italic; font-size: 13px; letter-spacing: 2px; color: var(--warm); opacity: 0.7; }
+  .photo-note { font-size: 13px; font-style: italic; color: var(--muted); margin-top: -32px; margin-bottom: 44px; letter-spacing: 1px; }
+
+  .quote-block { position: relative; max-width: 600px; margin: 0 auto 48px; padding: 32px 40px; }
+  .quote-block::before { content: ''; position: absolute; inset: 0; border: 1px solid rgba(201,168,76,0.2); background: rgba(201,168,76,0.03); }
+  .quote-mark { font-size: 72px; line-height: 0.5; color: var(--gold); opacity: 0.4; display: block; margin-bottom: 16px; }
+  .quote-text { font-size: 20px; font-style: italic; font-weight: 300; line-height: 1.8; color: var(--text); letter-spacing: 0.5px; }
+  .quote-author { margin-top: 20px; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-dark); }
+
+  .virtues { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 0 auto 56px; max-width: 700px; }
+  .virtue-card { padding: 28px 16px; border: 1px solid rgba(201,168,76,0.2); background: rgba(255,255,255,0.5); transition: border-color 0.3s, background 0.3s; }
+  .virtue-card:hover { border-color: rgba(201,168,76,0.5); background: rgba(201,168,76,0.04); }
+  .virtue-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+  .virtue-name { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 8px; }
+  .virtue-desc { font-size: 14px; font-style: italic; color: var(--muted); line-height: 1.6; }
+  .footer-text { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-top: 16px; }
+  .footer-text span { color: var(--gold); }
+
+  /* ══ BLACKJACK PAGE ══ */
+  .bj-wrap { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .bj-header { text-align: center; margin-bottom: 28px; }
+  .bj-title { font-family: 'Cinzel', serif; font-size: clamp(22px, 4vw, 36px); font-weight: 400; letter-spacing: 4px; color: var(--deep); margin-bottom: 6px; }
+  .bj-subtitle { font-style: italic; font-size: 15px; color: var(--muted); letter-spacing: 2px; }
+
+  .bj-table {
+    background: var(--felt);
+    border-radius: 120px / 60px;
+    border: 6px solid var(--gold-dark);
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.4), 0 8px 40px rgba(0,0,0,0.3);
+    padding: 36px 36px 28px;
+    position: relative; overflow: hidden;
+  }
+
+  .bj-table::before {
+    content: ''; position: absolute; inset: 0;
+    border-radius: 120px / 60px;
+    border: 2px solid rgba(201,168,76,0.12); margin: 6px;
+    pointer-events: none;
+  }
+
+  .score-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.28);
+    border-radius: 8px; margin-bottom: 28px;
+    position: relative; z-index: 2;
+  }
+
+  .score-item { text-align: center; }
+  .score-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(201,168,76,0.7); display: block; margin-bottom: 2px; }
+  .score-value { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 500; color: #fff; }
+  .score-value.chips { color: var(--gold-light); }
+
+  .bj-area { position: relative; z-index: 2; margin-bottom: 16px; }
+
+  .area-label {
+    font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 4px;
+    text-transform: uppercase; color: rgba(201,168,76,0.6);
+    margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+  }
+
+  .area-label::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.2); }
+  .area-score { font-family: 'Cinzel', serif; font-size: 13px; color: rgba(255,255,255,0.8); background: rgba(0,0,0,0.3); padding: 2px 10px; border-radius: 20px; flex-shrink: 0; }
+
+  .cards-row { display: flex; gap: 10px; flex-wrap: wrap; min-height: 104px; align-items: flex-start; }
+
+  .card {
+    width: 68px; height: 98px;
+    background: #fffdf8;
+    border: 1.5px solid #d4b87a;
+    border-radius: 7px;
+    display: flex; flex-direction: column;
+    justify-content: space-between; padding: 4px 6px;
+    font-family: 'Cormorant Garamond', serif; font-weight: 600;
+    position: relative;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.5);
+    animation: cardDeal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    flex-shrink: 0;
+  }
+
+  @keyframes cardDeal {
+    from { opacity: 0; transform: translateY(-28px) scale(0.85) rotate(-4deg); }
+    to { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+  }
+
+  .card.red { color: #c0392b; }
+  .card.black { color: #1a1208; }
+  .card-corner { font-size: 13px; line-height: 1.1; }
+  .card-corner.bottom { align-self: flex-end; transform: rotate(180deg); }
+  .card-suit-mid { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 26px; opacity: 0.1; }
+
+  .card.facedown {
+    background: repeating-linear-gradient(135deg, #1a4a2e 0px, #1a4a2e 8px, #235c38 8px, #235c38 16px);
+    border-color: var(--gold-dark);
+  }
+
+  .card.facedown::after { content: '🂠'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 38px; color: rgba(201,168,76,0.45); }
+
+  .bj-message { position: relative; z-index: 2; text-align: center; min-height: 48px; display: flex; align-items: center; justify-content: center; margin: 14px 0 10px; }
+
+  .msg-text {
+    font-family: 'Cinzel', serif; font-size: clamp(15px, 3vw, 22px);
+    letter-spacing: 2px; padding: 8px 22px; border-radius: 4px; transition: all 0.3s;
+  }
+
+  .msg-text.win { color: #f1c40f; background: rgba(241,196,15,0.1); border: 1px solid rgba(241,196,15,0.3); animation: pop 0.35s ease; }
+  .msg-text.lose { color: #e74c3c; background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); }
+  .msg-text.push { color: #bdc3c7; background: rgba(189,195,199,0.1); border: 1px solid rgba(189,195,199,0.3); }
+  .msg-text.info { color: rgba(255,255,255,0.65); font-size: 14px; border: none; background: none; }
+
+  @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.07); } 100% { transform: scale(1); } }
+
+  .bet-section {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; margin: 14px 0; flex-wrap: wrap;
+  }
+
+  .chip {
+    width: 46px; height: 46px; border-radius: 50%;
+    border: 3px dashed rgba(255,255,255,0.45);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cinzel', serif; font-size: 11px; font-weight: 500;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    flex-shrink: 0; color: #fff;
+  }
+
+  .chip:hover { transform: scale(1.12); }
+  .chip:active { transform: scale(0.95); }
+  .chip.c5   { background: radial-gradient(circle at 35% 35%, #e74c3c, #922b21); box-shadow: 0 3px 8px rgba(0,0,0,0.4); }
+  .chip.c10  { background: radial-gradient(circle at 35% 35%, #3498db, #1a5276); box-shadow: 0 3px 8px rgba(0,0,0,0.4); }
+  .chip.c25  { background: radial-gradient(circle at 35% 35%, #2ecc71, #1a7a43); box-shadow: 0 3px 8px rgba(0,0,0,0.4); }
+  .chip.c50  { background: radial-gradient(circle at 35% 35%, #9b59b6, #5b2c6f); box-shadow: 0 3px 8px rgba(0,0,0,0.4); }
+  .chip.c100 { background: radial-gradient(circle at 35% 35%, #c9a84c, #6d4c0e); box-shadow: 0 3px 8px rgba(0,0,0,0.4); }
+
+  .bet-display { font-family: 'Cinzel', serif; font-size: 18px; color: var(--gold-light); min-width: 80px; text-align: center; }
+  .bet-label { font-size: 9px; letter-spacing: 3px; color: rgba(201,168,76,0.6); display: block; margin-bottom: 2px; font-family: 'Cinzel', serif; }
+
+  .action-btns { position: relative; z-index: 2; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 6px; }
+
+  .bj-btn {
+    font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 10px 20px; border: 1px solid rgba(201,168,76,0.5);
+    background: rgba(0,0,0,0.3); color: var(--gold-light);
+    cursor: pointer; border-radius: 4px; transition: all 0.2s;
+  }
+
+  .bj-btn:hover:not(:disabled) { background: rgba(201,168,76,0.15); border-color: var(--gold); color: #fff; }
+  .bj-btn:active:not(:disabled) { transform: scale(0.97); }
+  .bj-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .bj-btn.primary { background: rgba(201,168,76,0.2); border-color: var(--gold); }
+  .bj-btn.primary:hover:not(:disabled) { background: rgba(201,168,76,0.38); }
+
+  .bj-rules {
+    margin-top: 22px; text-align: center;
+    display: inline-flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+    padding: 12px 24px; border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(255,255,255,0.4); border-radius: 4px;
+  }
+
+  .rule-item { font-size: 12px; color: var(--muted); font-style: italic; }
+  .rule-item strong { font-style: normal; color: var(--gold-dark); font-weight: 500; }
+
+  @keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 20px rgba(201,168,76,0.2); }
+    50% { text-shadow: 0 0 40px rgba(201,168,76,0.5), 0 0 60px rgba(201,168,76,0.2); }
+  }
+
+  @media (max-width: 600px) {
+    .tribute-inner, .bj-wrap { padding: 32px 20px 60px; }
+    .virtues { grid-template-columns: 1fr; max-width: 280px; }
+    .photo-placeholder { width: 220px; height: 270px; }
+    .bj-table { padding: 24px 18px 22px; border-radius: 60px / 40px; }
+    .card { width: 58px; height: 84px; }
+    .score-bar { flex-wrap: wrap; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="nav-btn active" onclick="showPage('tribute',this)">✦ Sai Baba</button>
+  <button class="nav-btn" onclick="showPage('blackjack',this)">♠ Blackjack</button>
+</nav>
+
+<!-- TRIBUTE PAGE -->
+<div id="tribute" class="page active">
+  <div class="tribute-inner">
+    <div class="top-ornament">✦ &nbsp; Divine Presence &nbsp; ✦</div>
+    <div class="om-symbol">ॐ</div>
+    <h1>Sathya Sai Baba<span>Embodiment of Love &amp; Wisdom</span></h1>
+    <div class="divider"><div class="divider-diamond"></div><div class="divider-diamond"></div><div class="divider-diamond"></div></div>
+
+    <svg class="smiley-face" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="fg" cx="40%" cy="35%"><stop offset="0%" stop-color="#f5d98c"/><stop offset="100%" stop-color="#c9a84c"/></radialGradient>
+        <radialGradient id="gg" cx="50%" cy="50%"><stop offset="0%" stop-color="rgba(201,168,76,0.3)"/><stop offset="100%" stop-color="rgba(201,168,76,0)"/></radialGradient>
+      </defs>
+      <circle cx="60" cy="60" r="58" fill="url(#gg)"><animate attributeName="r" values="56;60;56" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/></circle>
+      <circle cx="60" cy="60" r="48" fill="url(#fg)" stroke="#c9a84c" stroke-width="1.5"/>
+      <ellipse cx="42" cy="50" rx="5" ry="6" fill="#3a2a0e"/>
+      <ellipse cx="78" cy="50" rx="5" ry="6" fill="#3a2a0e"/>
+      <circle cx="44" cy="47" r="2" fill="white" opacity="0.7"/>
+      <circle cx="80" cy="47" r="2" fill="white" opacity="0.7"/>
+      <path d="M 38 72 Q 60 90 82 72" stroke="#3a2a0e" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="30" cy="72" rx="10" ry="6" fill="rgba(220,120,100,0.25)"/>
+      <ellipse cx="90" cy="72" rx="10" ry="6" fill="rgba(220,120,100,0.25)"/>
+    </svg>
+
+    <div class="photo-frame">
+      <div class="frame-outer">
+        <div class="frame-inner">
+          <div class="photo-placeholder">
+            <span class="portrait-icon">🙏</span>
+            <span class="photo-label">Place Swami's photo here</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="photo-note">Replace the placeholder with a photograph of Bhagawan Sri Sathya Sai Baba</p>
+
+    <div class="quote-block">
+      <span class="quote-mark">"</span>
+      <p class="quote-text">Love all, Serve all.<br>Help ever, Hurt never.</p>
+      <p class="quote-author">— Bhagawan Sri Sathya Sai Baba</p>
+    </div>
+
+    <div class="divider"><div class="divider-diamond"></div></div>
+
+    <div class="virtues">
+      <div class="virtue-card"><span class="virtue-icon">💛</span><p class="virtue-name">Love</p><p class="virtue-desc">Unconditional love for all beings, seeing the divine in everyone</p></div>
+      <div class="virtue-card"><span class="virtue-icon">🕊️</span><p class="virtue-name">Peace</p><p class="virtue-desc">Inner stillness that transcends all circumstances and conditions</p></div>
+      <div class="virtue-card"><span class="virtue-icon">✨</span><p class="virtue-name">Truth</p><p class="virtue-desc">Satya — the eternal truth that is the foundation of all existence</p></div>
+    </div>
+
+    <svg width="200" height="20" viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="10" x2="85" y2="10" stroke="#c9a84c" stroke-width="0.5" opacity="0.5"/>
+      <polygon points="100,2 106,10 100,18 94,10" fill="none" stroke="#c9a84c" stroke-width="1"/>
+      <line x1="115" y1="10" x2="200" y2="10" stroke="#c9a84c" stroke-width="0.5" opacity="0.5"/>
+    </svg>
+    <p class="footer-text">Jai <span>Sai Ram</span> &nbsp;✦&nbsp; Sai <span>Bless</span> All</p>
+  </div>
+</div>
+
+<!-- BLACKJACK PAGE -->
+<div id="blackjack" class="page">
+  <div class="bj-wrap">
+    <div class="bj-header">
+      <div class="bj-title">♠ Blackjack ♠</div>
+      <div class="bj-subtitle">Classic Casino — Beat the Dealer to 21</div>
+    </div>
+
+    <div class="bj-table">
+      <div class="score-bar">
+        <div class="score-item"><span class="score-label">Chips</span><span class="score-value chips" id="chips">1000</span></div>
+        <div class="score-item"><span class="score-label">Bet</span><span class="score-value" id="bet-disp">0</span></div>
+        <div class="score-item"><span class="score-label">Wins</span><span class="score-value" id="wins">0</span></div>
+        <div class="score-item"><span class="score-label">Losses</span><span class="score-value" id="losses">0</span></div>
+      </div>
+
+      <div class="bj-area">
+        <div class="area-label">Dealer <span class="area-score" id="d-score">—</span></div>
+        <div class="cards-row" id="d-cards"></div>
+      </div>
+
+      <div class="bj-message"><div class="msg-text info" id="msg">Place your bet below, then Deal</div></div>
+
+      <div class="bj-area">
+        <div class="area-label">You <span class="area-score" id="p-score">—</span></div>
+        <div class="cards-row" id="p-cards"></div>
+      </div>
+
+      <div class="bet-section">
+        <button class="chip c5"   onclick="addBet(5)">5</button>
+        <button class="chip c10"  onclick="addBet(10)">10</button>
+        <button class="chip c25"  onclick="addBet(25)">25</button>
+        <button class="chip c50"  onclick="addBet(50)">50</button>
+        <button class="chip c100" onclick="addBet(100)">100</button>
+        <div class="bet-display"><span class="bet-label">Current Bet</span>$<span id="bet-amt">0</span></div>
+      </div>
+
+      <div class="action-btns">
+        <button class="bj-btn primary" id="btn-deal"   onclick="deal()">Deal</button>
+        <button class="bj-btn"         id="btn-hit"    onclick="hit()"        disabled>Hit</button>
+        <button class="bj-btn"         id="btn-stand"  onclick="stand()"      disabled>Stand</button>
+        <button class="bj-btn"         id="btn-double" onclick="doubleDown()" disabled>Double</button>
+        <button class="bj-btn"         id="btn-clear"  onclick="clearBet()">Clear Bet</button>
+      </div>
+    </div>
+
+    <div style="text-align:center;">
+      <div class="bj-rules">
+        <span class="rule-item"><strong>Blackjack</strong> pays 3:2</span>
+        <span class="rule-item"><strong>Dealer</strong> stands on soft 17</span>
+        <span class="rule-item"><strong>Aces</strong> count 1 or 11</span>
+        <span class="rule-item"><strong>Double</strong> on any 2 cards</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ─── Blackjack ─── */
+const SUITS = ['♠','♥','♦','♣'];
+const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+let deck=[], ph=[], dh=[], chips=1000, bet=0, wins=0, losses=0, state='betting';
+
+function buildDeck() {
+  let base = [];
+  for (let s of SUITS) for (let r of RANKS) base.push({s,r});
+  deck = [];
+  for (let i=0;i<6;i++) deck.push(...base.map(c=>({...c})));
+  for (let i=deck.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [deck[i],deck[j]]=[deck[j],deck[i]]; }
+}
+
+function draw() { if(deck.length<52) buildDeck(); return deck.pop(); }
+
+function val(card) {
+  if(['J','Q','K'].includes(card.r)) return 10;
+  if(card.r==='A') return 11;
+  return parseInt(card.r);
+}
+
+function total(hand) {
+  let t=0, aces=0;
+  for(let c of hand){t+=val(c); if(c.r==='A') aces++;}
+  while(t>21 && aces>0){t-=10; aces--;}
+  return t;
+}
+
+function isBJ(hand){ return hand.length===2 && total(hand)===21; }
+function isRed(s){ return s==='♥'||s==='♦'; }
+
+function makeCard(card, facedown=false) {
+  const d=document.createElement('div');
+  d.className='card'+(facedown?' facedown':(isRed(card.s)?' red':' black'));
+  if(!facedown){
+    d.innerHTML=`<div class="card-corner">${card.r}<br>${card.s}</div><div class="card-suit-mid">${card.s}</div><div class="card-corner bottom">${card.r}<br>${card.s}</div>`;
+  }
+  return d;
+}
+
+function render(hideSecond=true) {
+  const pc=document.getElementById('p-cards'), dc=document.getElementById('d-cards');
+  pc.innerHTML=''; dc.innerHTML='';
+  ph.forEach(c=>pc.appendChild(makeCard(c)));
+  dh.forEach((c,i)=>dc.appendChild(makeCard(c, hideSecond&&i===1)));
+  document.getElementById('p-score').textContent = ph.length ? total(ph) : '—';
+  if(hideSecond && dh.length>1) document.getElementById('d-score').textContent = val(dh[0]);
+  else document.getElementById('d-score').textContent = dh.length ? total(dh) : '—';
+}
+
+function sync() {
+  document.getElementById('chips').textContent=chips;
+  document.getElementById('bet-disp').textContent=bet;
+  document.getElementById('bet-amt').textContent=bet;
+  document.getElementById('wins').textContent=wins;
+  document.getElementById('losses').textContent=losses;
+}
+
+function msg(txt, cls='info') {
+  const el=document.getElementById('msg');
+  el.className='msg-text '+cls; el.textContent=txt;
+}
+
+function btns(playing) {
+  document.getElementById('btn-deal').disabled=playing;
+  document.getElementById('btn-hit').disabled=!playing;
+  document.getElementById('btn-stand').disabled=!playing;
+  document.getElementById('btn-double').disabled=!playing||ph.length!==2||chips<bet;
+  document.getElementById('btn-clear').disabled=playing;
+}
+
+function addBet(n) {
+  if(state!=='betting') return;
+  if(bet+n>chips){msg('Not enough chips!','lose');return;}
+  bet+=n; sync(); msg('Bet set. Hit Deal when ready.','info');
+}
+
+function clearBet() {
+  if(state!=='betting') return;
+  bet=0; sync(); msg('Place your bet below, then Deal','info');
+}
+
+function deal() {
+  if(bet===0){msg('Place a bet first!','info');return;}
+  if(state!=='betting') return;
+  if(deck.length<52) buildDeck();
+  chips-=bet; sync(); state='playing';
+  ph=[draw(),draw()]; dh=[draw(),draw()];
+  render(true); btns(true);
+  if(isBJ(ph)){setTimeout(()=>end('bj'),450);return;}
+  if(total(ph)===21){setTimeout(stand,400);return;}
+  msg('Hit or Stand?','info');
+}
+
+function hit() {
+  if(state!=='playing') return;
+  ph.push(draw()); render(true);
+  const t=total(ph);
+  if(t>21){setTimeout(()=>end('bust'),220);}
+  else if(t===21){setTimeout(stand,350);}
+  else btns(true);
+}
+
+function stand() {
+  if(state!=='playing') return;
+  btns(false); render(false);
+  function dealerTurn(){
+    const dt=total(dh);
+    const soft17=dt===17 && dh.some(c=>c.r==='A');
+    if(dt<17||soft17){dh.push(draw()); render(false); setTimeout(dealerTurn,480);}
+    else resolve();
+  }
+  setTimeout(dealerTurn,420);
+}
+
+function doubleDown() {
+  if(state!=='playing'||ph.length!==2) return;
+  chips-=bet; bet*=2; sync();
+  ph.push(draw()); render(true);
+  if(total(ph)>21) setTimeout(()=>end('bust'),300);
+  else setTimeout(stand,400);
+}
+
+function resolve() {
+  const pt=total(ph), dt=total(dh);
+  if(dt>21) end('dbust');
+  else if(pt>dt) end('win');
+  else if(pt<dt) end('lose');
+  else end('push');
+}
+
+function end(result) {
+  state='betting'; render(false); btns(false);
+  const map={
+    bj:    {t:'♠ Blackjack! You win!',  c:'win',  pay:Math.floor(bet*1.5)},
+    bust:  {t:'Bust! Over 21.',          c:'lose', pay:0},
+    dbust: {t:'Dealer busts! You win!',  c:'win',  pay:bet},
+    win:   {t:'You win!',                c:'win',  pay:bet},
+    lose:  {t:'Dealer wins.',            c:'lose', pay:0},
+    push:  {t:"Push — it's a tie!",      c:'push', pay:0, refund:true},
+  };
+  const o=map[result];
+  msg(o.t, o.c);
+  if(o.c==='win'){chips+=bet+o.pay; wins++;}
+  else if(o.refund) chips+=bet;
+  else losses++;
+  bet=0; sync();
+  if(chips===0){
+    setTimeout(()=>{chips=1000;sync();msg("Out of chips! Here's $1000 to continue.",'info');},1800);
+  }
+}
+
+buildDeck(); sync();
+</script>
+</body>
+</html>
